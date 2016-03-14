@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Parse
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,6 +16,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        Parse.initializeWithConfiguration(
+            ParseClientConfiguration(block: { (configuration:ParseMutableClientConfiguration) -> Void in
+                configuration.applicationId = "NisargaInstagram"
+                configuration.server = "https://nisargaparse.herokuapp.com/parse"
+            })
+        )
+        
+        // check if user is logged in.
+        if PFUser.currentUser() != nil {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let nav = storyboard.instantiateViewControllerWithIdentifier("MainNav") as! UINavigationController
+            let vc = storyboard.instantiateViewControllerWithIdentifier("HomeViewController")
+            nav.viewControllers = [vc]
+            window?.rootViewController = nav
+            
+            // if there is a logged in user then load the home view controller
+        }
+        
         return true
     }
 
